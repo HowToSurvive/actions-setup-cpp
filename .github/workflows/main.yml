@@ -1,0 +1,30 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up C++ toolchain
+      uses: actions/setup-cpp@v1
+      with:
+        cpp-version: '11'
+
+    - name: Build and Test
+      run: |
+        # Set the build number
+        echo "BUILD_NUMBER=$(date +%s%N | cut -b1-13)" >> $GITHUB_ENV
+
+        # Build the project
+        g++ -o main main.cpp
+
+        # Run the tests
+        ./main
